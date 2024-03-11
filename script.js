@@ -1,7 +1,7 @@
-let optionsButtons = document.querySelector(".option-button");
-let advancedOptionButton = document.querySelector(".adv-option-button");
-let fontName = document.getElementById("fontName");
-let fontSizeRef = document.getElementById("FontSize");
+let optionsButtons = document.querySelectorAll(".option-button");
+let advancedOptionButton = document.querySelectorAll(".adv-option-button");
+let fontName = document.getElementById("font-name");
+let fontSizeRef = document.getElementById("font-size");
 
 let writingArea = document.getElementById("textInput");
 let linkButton = document.getElementById("createLink");
@@ -19,8 +19,6 @@ let fontList = [
   "Georgia",
   "Courier New",
 ];
-
-console.log(scriptButtons);
 
 const initializer = () => {
   highlighter(alignButtons, true);
@@ -47,6 +45,46 @@ const initializer = () => {
   //default sizing
   fontSizeRef.value = 3;
 };
+
+//main logic
+const modifyText = (command, defaultUi, value) => {
+  //execCommand executes command on selected text
+  document.execCommand(command, defaultUi, value);
+};
+
+//for basic operations which don't need value parameter
+
+// optionsButtons.forEach((button) => {
+//   button.addEventListener("click", () => {
+//     modifyText(button.id, false, null);
+//   });
+// });
+
+optionsButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    modifyText(button.id, false, null);
+  });
+});
+
+//options that require value parameter (e.g colors, fonts)
+
+advancedOptionButton.forEach((button) => {
+  button.addEventListener("change", () => {
+    modifyText(button.id, false, button.value);
+  });
+});
+
+//link
+linkButton.addEventListener("click", () => {
+  let userLink = prompt("Enter a URL");
+  //if link has http then pass directly else add https
+  if (/http/i.test(userLink)) {
+    modifyText(linkButton.id, false, userLink);
+  } else {
+    userLink = `http://${userLink}`;
+    modifyText(linkButton.id, false, userLink);
+  }
+});
 
 //Highlight Clicked button
 const highlighter = (className, needRemovals) => {
