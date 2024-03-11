@@ -20,15 +20,36 @@ let fontList = [
   "Courier New",
 ];
 
+console.log(scriptButtons);
+
 const initializer = () => {
-  hightlighter(alignButtons, true);
-  hightlighter(spacingButtons, true);
-  hightlighter(alignButtons, false);
-  hightlighter(scriptButtons, true);
+  highlighter(alignButtons, true);
+  highlighter(spacingButtons, true);
+  highlighter(formatButtons, false);
+  highlighter(scriptButtons, true);
+
+  //create options for font names
+  fontList.map((value) => {
+    let option = document.createElement("option");
+    option.value = value;
+    option.innerHTML = value;
+    fontName?.appendChild(option);
+  });
+
+  //fontSize allows only till 7
+  for (let i = 1; i <= 7; i++) {
+    let option = document.createElement("option");
+    option.value = i;
+    option.innerHTML = i;
+    fontSizeRef.appendChild(option);
+  }
+
+  //default sizing
+  fontSizeRef.value = 3;
 };
 
 //Highlight Clicked button
-const hightlighter = (className, needRemovals) => {
+const highlighter = (className, needRemovals) => {
   className.forEach((button) => {
     button.addEventListener("click", () => {
       //needsRemoval =  true means only one button should be highlighted and other would be normal
@@ -41,7 +62,7 @@ const hightlighter = (className, needRemovals) => {
         }
 
         //Removing highlight from other buttons
-        hightlighterRemover(className);
+        highlighterRemover(className);
         if (!alreadyActive) {
           //hightlight clicked button
           button.classList.add("active");
@@ -53,3 +74,11 @@ const hightlighter = (className, needRemovals) => {
     });
   });
 };
+
+const highlighterRemover = (elements) => {
+  elements.forEach((element) => {
+    element.classList.remove("active");
+  });
+};
+
+window.onload = initializer();
